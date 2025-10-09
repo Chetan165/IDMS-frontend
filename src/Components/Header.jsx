@@ -1,4 +1,5 @@
 import React from "react";
+import Logout from "../Logout";
 
 // Mock menu items, which will eventually be populated from your initial API call
 const mockMenuItems = [
@@ -94,6 +95,7 @@ const Header = ({ userRole }) => {
 
         {/* User Icon */}
         <UserIcon />
+        <Logout />
       </div>
     </header>
   );

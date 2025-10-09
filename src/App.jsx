@@ -6,6 +6,7 @@ import Header from "./Components/Header";
 import Dashboard from "./Dashboard";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./LoginPage";
+import IdeaPage from "./IdeaPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/ideaform" element={<IdeaPage />}></Route>
       </Routes>
     </div>
   );
