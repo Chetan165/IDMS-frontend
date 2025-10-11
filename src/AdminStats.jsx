@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import IdeaButton from "./Components/IdeaButton";
 
-const UserIdeasPage = () => {
+const AdminStats = () => {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -11,7 +11,7 @@ const UserIdeasPage = () => {
     const fetchUserIdeas = async () => {
       setLoading(true);
       try {
-        const result = await fetch("http://localhost:3000/api/getideas", {
+        const result = await fetch("http://localhost:3000/api/getideasAll", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -22,10 +22,9 @@ const UserIdeasPage = () => {
         const result2 = await result.json();
         console.log(result2);
         if (result2.ok) {
-          setIdeas(result2.ideas.ideas);
+          setIdeas(result2.ideas);
           setUser(result2.user);
         }
-        // -------------------------
       } catch (error) {
         console.error("Error fetching user ideas:", error);
         toast.error(error.msg);
@@ -37,35 +36,17 @@ const UserIdeasPage = () => {
     fetchUserIdeas();
   }, []);
 
-  // Calculate aggregated metrics
-  const totalIdeas = ideas.length;
-  const totalHardSavings = ideas.reduce(
-    (sum, idea) => sum + idea.HardSavings,
-    0
-  );
-  const ideasInDraft = ideas.filter((idea) => idea.Status === "Draft").length;
-
   if (loading) {
     return (
       <div className="p-6 text-center text-gray-500">Loading your ideas...</div>
     );
   }
 
-  return ideas.length > 0 ? (
+  return ideas?.length > 0 ? (
     <div className="p-6 min-h-screen bg-gray-50 font-inter">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-        My Idea Submissions (User ID: {user.id.substring(0, 10)}...)
+        All Idea Submissions
       </h2>
-
-      {/* --- Key Statistics Tiles --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatTile label="Total Ideas Submitted" value={totalIdeas} />
-        <StatTile
-          label="Total Estimated Hard Savings"
-          value={`$${totalHardSavings.toLocaleString()}`}
-        />
-        <StatTile label="Ideas Currently in Draft" value={ideasInDraft} />
-      </div>
 
       {/* --- Ideas Table --- */}
       <h3 className="text-xl font-semibold text-gray-700 mb-4">
@@ -114,12 +95,7 @@ const UserIdeasPage = () => {
     </div>
   ) : (
     <div>
-      <p className="text-center text-gray-500 p-8">
-        You haven't submitted any ideas yet. Click '+ New Idea' to get started!
-      </p>
-      <span className="flex flex-row justify-center items-center ">
-        <IdeaButton />
-      </span>
+      <p className="text-center text-gray-500 p-8">No Submissions Found</p>
     </div>
   );
 };
@@ -172,4 +148,4 @@ const StatusBadge = ({ status }) => {
   return <span className={`${baseClasses} ${colorClass}`}>{status}</span>;
 };
 
-export default UserIdeasPage;
+export default AdminStats;

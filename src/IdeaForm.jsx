@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import auth from "./Auth";
+import toast from "react-hot-toast";
 
-const mockGetUserId = () => "user-abc-12345";
-
-/**
- * Form component for submitting a new Idea.
- * @param {object} props
- * @param {function} props.onSuccess - Callback after successful submission.
- */
-const IdeaForm = ({ onSuccess }) => {
-  // Initial state matching the Mongoose Schema fields
+const IdeaForm = () => {
+  const [user, setUser] = useState();
   const [formData, setFormData] = useState({
     Title: "",
     Description: "",
@@ -31,22 +26,24 @@ const IdeaForm = ({ onSuccess }) => {
     setLoading(true);
     setMessage("");
 
-    // 1. Prepare Payload (Add required backend fields)
-    const payload = {
-      ...formData,
-      UserId: mockGetUserId(), // Mandatory field from your schema
-      Status: "Draft", // Default status set by the backend/schema
-    };
-
-    // 2. Simulate API Call (Replace with actual fetch/axios call to Express POST route)
-    console.log("Attempting to submit idea:", payload);
-
     try {
-      // await fetch('/api/ideas', { /* config... */ });
-
-      // --- MOCK RESPONSE FOR MVP ---
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // -----------------------------
+      const result = await fetch("http://localhost:3000/api/ideas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Title: formData.Title,
+          Description: formData.Description,
+          SoftSavings: formData.SoftSavings,
+          HardSavings: formData.HardSavings,
+          UserId: user.UserName,
+        }),
+      });
+      const result2 = await result.json();
+      if (result2.ok) {
+        toast.success("Idea submitted successfully!");
+      }
 
       setMessage("Idea submitted successfully! It is now in Draft status.");
       setFormData({
@@ -55,10 +52,6 @@ const IdeaForm = ({ onSuccess }) => {
         SoftSavings: 0,
         HardSavings: 0,
       });
-
-      if (onSuccess) {
-        onSuccess(); // Close modal or navigate back
-      }
     } catch (error) {
       setMessage("Error submitting idea. Please check the server connection.");
       console.error("Submission Error:", error);
@@ -66,6 +59,14 @@ const IdeaForm = ({ onSuccess }) => {
       setLoading(false);
     }
   };
+  useEffect(
+    () => async () => {
+      const result = await auth();
+      console.log(result.user);
+      setUser(result.user);
+    },
+    []
+  );
 
   return (
     <div className="p-6 max-w-2xl mx-auto bg-white rounded-xl shadow-2xl font-inter">
@@ -135,7 +136,6 @@ const IdeaForm = ({ onSuccess }) => {
   );
 };
 
-// Helper component for cleaner form layout
 const InputGroup = ({
   label,
   name,

@@ -1,16 +1,20 @@
 import React from "react";
 import Logout from "../Logout";
+import { useNavigate } from "react-router-dom";
 
-// Mock menu items, which will eventually be populated from your initial API call
-const mockMenuItems = [
-  { title: "Dashboard", path: "/dashboard" },
-  { title: "Idea Mgmt", path: "/idea-mgmt" },
+const AdminMenuItems = [
+  { title: "Dashboard", path: "/" },
+  { title: "Idea Mgmt", path: "/admin/ideaform" },
   { title: "Qualification", path: "/qualification" },
   { title: "Project Mgmt", path: "/project-mgmt" },
-  { title: "Control Room", path: "/control-room" }, // Added Control Room from the image
+  { title: "Control Room", path: "/control-room" },
 ];
 
-// Simplified SVG for the Search icon (used inline for single-file safety)
+const UserMenuItems = [
+  { title: "Dashboard", path: "/" },
+  { title: "Idea Mgmt", path: "/ideaform" },
+];
+
 const SearchIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +53,8 @@ const UserIcon = () => (
 );
 
 const Header = ({ userRole }) => {
+  const navigate = useNavigate();
+  const MenuItems = userRole === "Admin" ? AdminMenuItems : UserMenuItems;
   return (
     <header className="bg-blue-700 text-white p-3 shadow-lg flex items-center justify-between sticky top-0 z-10 w-full font-inter">
       {/* Logo Area */}
@@ -57,11 +63,10 @@ const Header = ({ userRole }) => {
 
         {/* Dynamic Navigation Menu (Hidden on small screens) */}
         <nav className="hidden md:flex items-center space-x-1 flex-grow">
-          {mockMenuItems.map((item, index) => (
-            // Note: In a real app, 'a' tags would be replaced with 'Link' components
+          {MenuItems.map((item, index) => (
             <a
               key={index}
-              href={item.path}
+              onClick={() => navigate(`${item.path}`)}
               className={`
                 px-3 py-2 rounded-lg text-sm font-medium transition-colors 
                 hover:bg-blue-600 

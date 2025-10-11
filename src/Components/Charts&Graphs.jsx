@@ -49,13 +49,13 @@ const TrendChart = ({ title, description }) => {
   );
 };
 
-const Chart = () => {
+const Chart = ({ HardSavingPercent, SoftSavingPercent }) => {
   return (
     <div className="flex space-x-8 mb-8 justify-start items-center">
       {/* Hard Savings Chart */}
       <div className="flex flex-col items-center bg-white p-4 rounded-xl shadow-md w-48">
         <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center text-blue-800 font-bold">
-          50%
+          {HardSavingPercent}%
         </div>
         <p className="mt-2 text-sm font-medium text-gray-700">Hard Savings</p>
         <p className="text-xs text-gray-500">Remaining</p>
@@ -64,7 +64,7 @@ const Chart = () => {
       {/*  Soft Savings Doughnut Chart*/}
       <div className="flex flex-col items-center bg-white p-4 rounded-xl shadow-md w-48">
         <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center text-blue-800 font-bold">
-          75%
+          {SoftSavingPercent}%
         </div>
         <p className="mt-2 text-sm font-medium text-gray-700">Soft Savings</p>
         <p className="text-xs text-gray-500">Remaining</p>
