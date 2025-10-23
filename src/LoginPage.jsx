@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import auth from "./Auth";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +33,16 @@ const LoginPage = () => {
       setError(err.msg);
     }
   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const isloggedin = await auth();
+      if (isloggedin.ok) {
+        toast.success("You are already logged in");
+        navigate("/");
+      }
+    };
+    fetchUser();
+  }, []);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 font-inter p-4">
       <div className="bg-white p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-md">

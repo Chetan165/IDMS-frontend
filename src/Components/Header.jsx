@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Logout from "../Logout";
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +53,13 @@ const UserIcon = () => (
 );
 
 const Header = ({ userRole }) => {
+  const [highlight, sethighlight] = useState("Dashboard");
   const navigate = useNavigate();
+  const updatehighlight = (item) => {
+    navigate(`${item.path}`);
+    sethighlight(item.title);
+  };
+
   const MenuItems = userRole === "Admin" ? AdminMenuItems : UserMenuItems;
   return (
     <header className="bg-blue-700 text-white p-3 shadow-lg flex items-center justify-between sticky top-0 z-10 w-full font-inter">
@@ -66,11 +72,17 @@ const Header = ({ userRole }) => {
           {MenuItems.map((item, index) => (
             <a
               key={index}
-              onClick={() => navigate(`${item.path}`)}
+              onClick={() => {
+                updatehighlight(item);
+              }}
               className={`
                 px-3 py-2 rounded-lg text-sm font-medium transition-colors 
                 hover:bg-blue-600 
-                ${item.title === "Dashboard" ? "bg-blue-600" : "bg-transparent"}
+                ${
+                  item.title === `${highlight}`
+                    ? "bg-blue-600"
+                    : "bg-transparent"
+                }
               `}
             >
               {item.title}

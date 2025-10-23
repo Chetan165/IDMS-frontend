@@ -14,7 +14,7 @@ const AdminIdeaMgmt = () => {
       if (!data.ok || data.user.role === "User") navigate("/");
     };
     fetchdata();
-  });
+  }, []);
   return (
     <div>
       <Header userRole={user.role} />

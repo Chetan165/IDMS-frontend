@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import IdeaButton from "./Components/IdeaButton";
+import File from "./Components/File";
 
 const UserIdeasPage = () => {
   const [ideas, setIdeas] = useState([]);
@@ -23,6 +24,7 @@ const UserIdeasPage = () => {
         console.log(result2);
         if (result2.ok) {
           setIdeas(result2.ideas.ideas);
+          console.log(result2.ideas.ideas);
           setUser(result2.user);
         }
         // -------------------------
@@ -37,7 +39,6 @@ const UserIdeasPage = () => {
     fetchUserIdeas();
   }, []);
 
-  // Calculate aggregated metrics
   const totalIdeas = ideas.length;
   const totalHardSavings = ideas.reduce(
     (sum, idea) => sum + idea.HardSavings,
@@ -81,15 +82,16 @@ const UserIdeasPage = () => {
               <TableHeader>Hard Savings ($)</TableHeader>
               <TableHeader>Soft Savings (RWH)</TableHeader>
               <TableHeader>Submitted Date</TableHeader>
+              <TableHeader>Attachment</TableHeader>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {ideas.map((idea) => (
               <tr
-                key={idea.id}
+                key={idea._id}
                 className="hover:bg-blue-50 transition duration-100"
               >
-                <TableData>{idea.id}</TableData>
+                <TableData>{idea._id}</TableData>
                 <TableData className="font-medium text-blue-700">
                   {idea.Title}
                 </TableData>
@@ -99,6 +101,10 @@ const UserIdeasPage = () => {
                 <TableData>${idea.HardSavings.toLocaleString()}</TableData>
                 <TableData>{idea.SoftSavings} hrs</TableData>
                 <TableData>{idea.CreatedAt}</TableData>
+                <TableData>
+                  {" "}
+                  <File ObjId={idea._id} />
+                </TableData>
               </tr>
             ))}
           </tbody>

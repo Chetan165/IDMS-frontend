@@ -70,7 +70,7 @@ const AdminStats = () => {
                 key={idea.id}
                 className="hover:bg-blue-50 transition duration-100"
               >
-                <TableData>{idea.id}</TableData>
+                <TableData>{idea._id}</TableData>
                 <TableData className="font-medium text-blue-700">
                   {idea.Title}
                 </TableData>
