@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AdminStats = () => {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserIdeas = async () => {
@@ -24,6 +26,7 @@ const AdminStats = () => {
         if (result2.ok) {
           setIdeas(result2.ideas);
           setUser(result2.user);
+          console.log(ideas);
         }
       } catch (error) {
         console.error("Error fetching user ideas:", error);
@@ -49,9 +52,6 @@ const AdminStats = () => {
       </h2>
 
       {/* --- Ideas Table --- */}
-      <h3 className="text-xl font-semibold text-gray-700 mb-4">
-        All Submissions
-      </h3>
       <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -62,6 +62,7 @@ const AdminStats = () => {
               <TableHeader>Hard Savings ($)</TableHeader>
               <TableHeader>Soft Savings (RWH)</TableHeader>
               <TableHeader>Submitted Date</TableHeader>
+              <TableHeader>Attachment</TableHeader>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -80,6 +81,20 @@ const AdminStats = () => {
                 <TableData>${idea.HardSavings.toLocaleString()}</TableData>
                 <TableData>{idea.SoftSavings} hrs</TableData>
                 <TableData>{idea.CreatedAt}</TableData>
+                <TableData>
+                  {idea.URL != "" ? (
+                    <a
+                      className="font-semibold bg-blue-400 rounded-md p-2"
+                      href={idea.URL}
+                    >
+                      View Attachment
+                    </a>
+                  ) : (
+                    <span className="font-thin text-gray-500">
+                      No Attachments
+                    </span>
+                  )}
+                </TableData>
               </tr>
             ))}
           </tbody>
